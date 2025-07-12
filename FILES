@@ -1,0 +1,13 @@
+\`\`\`typescript
+// app/dashboard/page.tsx
+import { Search, MessageCircle, Settings, LogOut, Compass, Heart, MessageSquare } from 'lucide-react';
+
+// components/vibe-search.tsx
+import { MessageSquare } from 'lucide-react';
+
+// app/settings/page.tsx
+import { ArrowLeft, Save, Trash2, Heart, MessageSquare } from 'lucide-react';
+
+// app/settings/reviews/page.tsx
+import { ArrowLeft, MessageSquare, Star, Trash2, Edit } from 'lucide-react';
+\`\`\`
