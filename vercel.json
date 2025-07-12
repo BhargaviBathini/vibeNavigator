@@ -1,0 +1,7 @@
+{
+  // Instruct Vercel to allow an up-to-date install even if the
+  // lock-file differs from package.json
+  "build": {
+    "installCommand": "pnpm install --no-frozen-lockfile"
+  }
+}
