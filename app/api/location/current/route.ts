@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { GooglePlacesService } from "@/lib/google-places"
 
-const googlePlacesService = new GooglePlacesService(process.env.GOOGLE_API_KEY!)
+// Instantiate GooglePlacesService with the single NEXT_PUBLIC_GOOGLE_API_KEY
+const googlePlacesService = new GooglePlacesService(process.env.NEXT_PUBLIC_GOOGLE_API_KEY!)
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,8 +14,9 @@ export async function POST(request: NextRequest) {
 
     let data
     try {
+      // Use NEXT_PUBLIC_GOOGLE_API_KEY for reverse geocoding
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.GOOGLE_API_KEY}`,
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`,
       )
       data = await response.json()
     } catch (err) {

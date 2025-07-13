@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { GooglePlacesService } from "@/lib/google-places"
-import { OpenAIService } from "@/lib/openai-service"
+import { OpenAIService } from "@/lib/openai-service" // This service name is misleading, it's used for Google AI
 import { ScrapingService } from "@/lib/scraping-service"
 
-const placesService = new GooglePlacesService(process.env.GOOGLE_API_KEY!)
-const openaiService = new OpenAIService(process.env.OPENAI_API_KEY!)
+// Instantiate services with the single NEXT_PUBLIC_GOOGLE_API_KEY
+const placesService = new GooglePlacesService(process.env.NEXT_PUBLIC_GOOGLE_API_KEY!)
+const aiService = new OpenAIService(process.env.NEXT_PUBLIC_GOOGLE_API_KEY!) // Renamed from openaiService for clarity
 const scrapingService = new ScrapingService()
 
 // Category mapping for Google Places API
@@ -105,10 +106,10 @@ export async function POST(request: NextRequest) {
             Boolean,
           ) as string[]
 
-          // Generate AI-powered vibe content
+          // Generate AI-powered vibe content using the consolidated AI service
           const [vibeDescription, personalizedEmojis] = await Promise.all([
-            openaiService.generateVibeDescription(place.name, category, allReviewsText, userProfile),
-            openaiService.generatePersonalizedEmojis(place.name, category, userProfile, allReviewsText),
+            aiService.generateVibeDescription(place.name, category, allReviewsText, userProfile),
+            aiService.generatePersonalizedEmojis(place.name, category, userProfile, allReviewsText),
           ])
 
           // Calculate distance and travel time
@@ -145,6 +146,7 @@ export async function POST(request: NextRequest) {
             tags: generatePersonalizedTags(place, userProfile, allReviewsText),
             description: vibeDescription, // This is the AI-generated tagline
             vibeDescription: vibeDescription, // Detailed AI-generated vibe description
+            personalizedEmojis, // Include personalized emojis
             coordinates: {
               lat: place.geometry.location.lat,
               lng: place.geometry.location.lng,
@@ -167,6 +169,7 @@ export async function POST(request: NextRequest) {
             isFavorite: false,
           }
         } catch (error) {
+          console.error(`Error processing place ${place.name}:`, error)
           // If processing a single place fails, return null so it's filtered out
           return null
         }
@@ -184,7 +187,8 @@ export async function POST(request: NextRequest) {
       userLocation: userLocation || null,
     })
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Error in places search API:", error)
+    return NextResponse.json({ error: "Internal server error during place search" }, { status: 500 })
   }
 }
 

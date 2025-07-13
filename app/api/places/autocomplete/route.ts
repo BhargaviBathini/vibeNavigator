@@ -9,8 +9,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ predictions: [] })
     }
 
+    // Use NEXT_PUBLIC_GOOGLE_API_KEY for autocomplete
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&types=(cities)&key=${process.env.GOOGLE_API_KEY}`,
+      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&types=(cities)&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`,
     )
 
     const data = await response.json()

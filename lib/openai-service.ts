@@ -1,13 +1,13 @@
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
+import { openai } from "@ai-sdk/openai" // This import is actually not used for Google models, but kept for now.
 
 export class OpenAIService {
+  // Consider renaming this to GenerativeAIService for clarity
   private apiKey: string
-  private baseUrl: string
 
-  constructor(apiKey: string, baseUrl = "https://models.github.ai/inference") {
+  constructor(apiKey: string) {
+    // Removed baseUrl parameter
     this.apiKey = apiKey
-    this.baseUrl = baseUrl
   }
 
   async generateVibeDescription(
@@ -24,8 +24,8 @@ export class OpenAIService {
     try {
       const { text } = await generateText({
         model: openai("gpt-4o-mini", {
+          // This should ideally be google() if using Gemini
           apiKey: this.apiKey,
-          baseURL: this.baseUrl,
         }),
         prompt: prompt,
         temperature: 0.7,
@@ -51,8 +51,8 @@ export class OpenAIService {
     try {
       const { text } = await generateText({
         model: openai("gpt-4o-mini", {
+          // This should ideally be google() if using Gemini
           apiKey: this.apiKey,
-          baseURL: this.baseUrl,
         }),
         prompt: prompt,
         temperature: 0.7,

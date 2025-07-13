@@ -15,11 +15,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 })
     }
 
-    // Ensure the correct Gemini API key environment variable is set
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-      console.error("GOOGLE_GENERATIVE_AI_API_KEY environment variable is not set.")
+    // Ensure the single consolidated Google API key is set
+    if (!process.env.NEXT_PUBLIC_GOOGLE_API_KEY) {
+      console.error("NEXT_PUBLIC_GOOGLE_API_KEY environment variable is not set.")
       return NextResponse.json(
-        { error: "Server mis-configuration: GOOGLE_GENERATIVE_AI_API_KEY is missing." },
+        { error: "Server mis-configuration: NEXT_PUBLIC_GOOGLE_API_KEY is missing." },
         { status: 500 },
       )
     }
@@ -55,7 +55,7 @@ The current city is ${cityContext}. Be helpful, engaging, and concise.`
     const { text } = await generateText({
       model: google("models/gemini-1.5-flash-latest", {
         // Using Gemini Flash Lite model
-        apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY, // Pass the correct environment variable
+        apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY, // Use the consolidated key
       }),
       system: systemPrompt, // Pass system prompt separately
       messages: messagesForAI, // Pass the conversation history
